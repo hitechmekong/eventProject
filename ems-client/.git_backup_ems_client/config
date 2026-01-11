@@ -1,0 +1,18 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = https://github.com/hitechmekong/eventProject.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "dev"]
+	vscode-merge-base = origin/main
+	remote = origin
+	merge = refs/heads/dev
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+	vscode-merge-base = origin/main
