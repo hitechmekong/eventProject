@@ -9,13 +9,18 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const app_1 = __importDefault(require("./app"));
 const SocketService_1 = __importDefault(require("./services/SocketService"));
 dotenv_1.default.config();
+console.error('----- DEBUGGING CONNECTION (STDERR) -----');
+console.error('Current Env PORT:', process.env.PORT);
+console.error('Current Env MONGO_URI:', process.env.MONGO_URI ? '******(Hidden)******' : 'NOT SET (UNDEFINED)');
+console.error('-----------------------------------------');
 const PORT = process.env.PORT || 3000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/ems_db';
-console.log('----- DEBUGGING CONNECTION -----');
-console.log('Current Env PORT:', process.env.PORT);
-console.log('Current Env MONGO_URI:', process.env.MONGO_URI ? '******(Hidden)******' : 'NOT SET');
-console.log('Final Connect URI:', MONGO_URI);
-console.log('--------------------------------');
+// CRITICAL CHANGE: Removed localhost fallback to verify if env var is loaded
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+    console.error('FATAL ERROR: MONGO_URI environment variable is missing!');
+    console.error('Server requires MONGO_URI to start. Exiting...');
+    process.exit(1);
+}
 // Create HTTP server from Express app
 const server = http_1.default.createServer(app_1.default);
 // Initialize Socket.io
