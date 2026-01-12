@@ -36,14 +36,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const EventSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
+    description: { type: String, default: '' },
     time: { type: Date, required: true },
     location: { type: String, required: true },
     background_image: { type: String },
-    config: {
-        capacity: { type: Number, default: 100 },
-        is_checkin_open: { type: Boolean, default: false },
-        enable_seat_map: { type: Boolean, default: false }
+    max_guests: { type: Number, default: 100 },
+    table_count: { type: Number, default: 10 },
+    checkin_mechanism: {
+        type: String,
+        enum: ['organizer_scan', 'guest_scan'],
+        default: 'organizer_scan'
     },
-    seat_map: { type: mongoose_1.Schema.Types.Mixed } // JSON structure
-}, { timestamps: true });
+    event_qr_code: { type: String },
+    is_checkin_open: { type: Boolean, default: false },
+    created_by: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true }
+}, {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+});
 exports.default = mongoose_1.default.model('Event', EventSchema);

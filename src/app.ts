@@ -1,6 +1,9 @@
 import express from 'express';
 import checkinRoutes from './routes/checkinRoutes';
 import guestRoutes from './routes/guestRoutes';
+import authRoutes from './routes/authRoutes';
+import eventRoutes from './routes/eventRoutes';
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 
@@ -8,16 +11,21 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Cors (Add if needed given we are doing cross-origin from Next.js potentially if on different ports)
-// For now assuming proxy or same origin dev
+// CORS - Updated to include Authorization header for JWT
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
     next();
 });
 
 // Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/checkin', checkinRoutes);
 app.use('/api/guests', guestRoutes);
 
