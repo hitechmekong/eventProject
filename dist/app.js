@@ -25,4 +25,11 @@ app.use('/api/guests', guestRoutes_1.default);
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
+// Serve Static Frontend (Updated for Deployment)
+const path_1 = __importDefault(require("path"));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../public')));
+// SPA Fallback: Any request not handled by API or Static files returns index.html
+app.get('*', (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '../public/index.html'));
+});
 exports.default = app;
