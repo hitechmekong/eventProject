@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc", 
+    "build:local": "tsc",
+    "build": "echo 'Skipping build on server'",
     "start": "node dist/server.js"
   },
   "keywords": [],
