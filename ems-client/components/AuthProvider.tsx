@@ -62,8 +62,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     useEffect(() => {
         if (isLoading) return;
 
-        const publicPaths = ['/login', '/guest', '/welcome', '/'];
-        const isPublicPath = publicPaths.some(path => pathname === path || pathname?.startsWith('/guest'));
+        const publicPaths = ['/login', '/guest', '/welcome', '/', '/setup'];
+        const isPublicPath = publicPaths.some(path => pathname === path || pathname?.startsWith('/guest') || pathname?.startsWith('/setup'));
 
         if (!token && !isPublicPath) {
             router.push('/login');
