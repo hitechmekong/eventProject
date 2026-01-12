@@ -27,8 +27,11 @@ app.get('/health', (req, res) => {
 });
 // Serve Static Frontend (Updated for Deployment)
 // __dirname in compiled code = /dist, so ./public = /dist/public
+// extensions: ['html'] allows /admin to serve admin.html
 const path_1 = __importDefault(require("path"));
-app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
+app.use(express_1.default.static(path_1.default.join(__dirname, 'public'), {
+    extensions: ['html']
+}));
 // SPA Fallback: Any request not handled by API or Static files returns index.html
 // Express 5 requires Regex /.*/ instead of string '*'
 app.get(/.*/, (req, res) => {
