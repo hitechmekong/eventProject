@@ -9,6 +9,12 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/ems_db';
 
+console.log('----- DEBUGGING CONNECTION -----');
+console.log('Current Env PORT:', process.env.PORT);
+console.log('Current Env MONGO_URI:', process.env.MONGO_URI ? '******(Hidden)******' : 'NOT SET');
+console.log('Final Connect URI:', MONGO_URI);
+console.log('--------------------------------');
+
 // Create HTTP server from Express app
 const server = http.createServer(app);
 
