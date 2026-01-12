@@ -27,13 +27,14 @@ app.get('/health', (req, res) => {
 });
 
 // Serve Static Frontend (Updated for Deployment)
+// __dirname in compiled code = /dist, so ./public = /dist/public
 import path from 'path';
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // SPA Fallback: Any request not handled by API or Static files returns index.html
 // Express 5 requires Regex /.*/ instead of string '*'
 app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 export default app;
