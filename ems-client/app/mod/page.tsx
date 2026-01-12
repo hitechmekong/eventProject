@@ -29,7 +29,8 @@ const ModPage = () => {
         const toastId = toast.loading('Checking in...');
 
         try {
-            await axios.post('http://localhost:3000/api/checkin/scan', { ticket_code: rawValue });
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+            await axios.post(`${API_URL}/api/checkin/scan`, { ticket_code: rawValue });
             toast.success(`Success! ${rawValue}`, { id: toastId });
             setStats(prev => ({ ...prev, checkedIn: prev.checkedIn + 1 })); // Optimistic update
         } catch (error) {

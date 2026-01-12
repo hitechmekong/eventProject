@@ -9,12 +9,13 @@ import { Users, UserPlus, RefreshCcw, Search } from 'lucide-react';
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 const AdminPage = () => {
-    const { data, error, mutate } = useSWR('http://localhost:3000/api/guests', fetcher, { refreshInterval: 5000 });
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const { data, error, mutate } = useSWR(`${API_URL}/api/guests`, fetcher, { refreshInterval: 5000 });
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdding, setIsAdding] = useState(false);
 
     // New user form state
-    const [newUser, setNewUser] = useState({ name: '', ticket_code: '', seat_location: '' });
+    const [newUser, setNewUser] = useState({ name: '', ticket_code: '', seat_location: '', company: '', status: 'active' });
 
     const guests = data?.data || [];
     const stats = data?.stats || { total: 0, checkedIn: 0, pending: 0 };
@@ -24,26 +25,24 @@ const AdminPage = () => {
         g.ticket_code.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleAddGuest = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleAddGuest = async () => {
         try {
-            await axios.post('http://localhost:3000/api/guests', { ...newUser, event_id: '654321' }); // Default Event ID
-            toast.success('Guest added');
-            mutate(); // Refresh data
-            setNewUser({ name: '', ticket_code: '', seat_location: '' });
+            await axios.post(`${API_URL}/api/guests`, { ...newUser, event_id: '654321' }); // Default Event ID
+            setNewUser({ name: '', ticket_code: '', company: '', seat_location: '', status: 'active' });
             setIsAdding(false);
-        } catch (err) {
+            mutate(); // Refresh data
+            toast.success('Guest added');
+        } catch (error) {
             toast.error('Failed to add guest');
         }
     };
 
     const handleReset = async (id: string) => {
-        if (!confirm('Reset check-in status?')) return;
         try {
-            await axios.post(`http://localhost:3000/api/guests/${id}/reset`);
-            toast.success('Status reset');
+            await axios.post(`${API_URL}/api/guests/${id}/reset`);
             mutate();
-        } catch (err) {
+            toast.success('Check-in reset');
+        } catch (error) {
             toast.error('Failed to reset');
         }
     };
@@ -145,8 +144,8 @@ const AdminPage = () => {
                                     <td className="px-6 py-4 text-sm">{guest.seat_location || '-'}</td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${guest.checkin_status === 'checked_in'
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-800'
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'bg-gray-100 text-gray-800'
                                             }`}>
                                             {guest.checkin_status}
                                         </span>

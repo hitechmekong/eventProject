@@ -26,4 +26,13 @@ app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
 
+// Serve Static Frontend (Updated for Deployment)
+import path from 'path';
+app.use(express.static(path.join(__dirname, '../public')));
+
+// SPA Fallback: Any request not handled by API or Static files returns index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 export default app;

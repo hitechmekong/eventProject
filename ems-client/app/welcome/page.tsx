@@ -26,7 +26,7 @@ const WelcomeScreen = () => {
     // Constants
     const DISPLAY_DURATION = 30000; // 30 seconds
     const EVENT_ID = '654321'; // TODO: Get from URL or Config. Defaulting for simulation.
-    const SOCKET_URL = 'http://localhost:3000'; // Adjust if backend on different port
+    const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'; // Adjust if backend on different port
 
     // 1. Initialize Socket
     useEffect(() => {

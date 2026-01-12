@@ -18,7 +18,8 @@ const GuestPage = () => {
         const toastId = toast.loading('Verifying...');
 
         try {
-            const res = await axios.post('http://localhost:3000/api/checkin/self', { ticket_code: ticketCode });
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+            const res = await axios.post(`${API_URL}/api/checkin/self`, { ticket_code: ticketCode });
             setGuestData(res.data.data);
             toast.success('Wait for your name!', { id: toastId });
         } catch (error: any) {
